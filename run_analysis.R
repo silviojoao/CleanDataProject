@@ -1,9 +1,16 @@
 
-#
-# THIS SCRIPT  BLABLA
-#
-#
-
+#####################################################################################
+##  What this script does:
+##
+##     - Download and unzip data in the working directory;
+##     - Merges the training and test data sets;
+##     - Adds their respective label and activity;
+##     - Select measurements on the mean and standard deviation for each measurement; 
+##     - Appropriately labels the data set with descriptive variable names;
+##     - Creates a independent tidy data set with the average of each variable for 
+##       each activity and each subject.
+##
+#####################################################################################
 
 ##
 ## Downloading and extract the data
@@ -60,12 +67,19 @@ all_data$labels <- activity_labels[all_data$labels,2]
 ##
 
 # creating a vector that contains the labels to be replaced
-subs_label <- c('.', 'Acc','BodyBody','Mag','tBody','Gyro', 'freq','fBody','-mean',
-                '-std()')
-final_label <- c('', 'accelerometer', 'body', 'magnitude','timebody', 'gyroscope', 
-                 'frequency', 'frequencybody', 'mean', 'std')
+subs_label <- c('labels', 'Acc','BodyBody','Mag','tBody','Gyro', 'freq','fBody','-mean',
+                '-std()', 'tGravity' , '\\.')
+final_label <- c('activity', 'accelerometer', 'body', 'magnitude','timebody', 'gyroscope', 
+                 'frequency', 'frequencybody', 'mean', 'std', 'timegravity', '')
 
 # Using the gsub function to replace the labels
 for (i in 1:length(final_label)){
       names(all_data) <- gsub(subs_label[i],final_label[i], names(all_data), ignore.case = T)
 }
+
+##
+## creates a second, independent tidy data set with the average of each variable for 
+## each activity and each subject.
+##
+final_data <- group_by(all_data, activity, subject) %>% summarise_all(funs(mean))
+write.table(final_data, 'Final_Dataset.txt', row.names = F)
