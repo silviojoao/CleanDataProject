@@ -11,6 +11,7 @@ The Repo includes the following files:
 =========================================
 
 - 'run_analysis.R': Script that performs the following steps:
+
       - Download and unzip data in the working directory;
       - Merges the training and test data sets;
       - Adds their respective label and activity;
